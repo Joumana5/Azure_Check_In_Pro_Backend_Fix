@@ -51,7 +51,7 @@ public String addEmployee(employeeDTO employeeDTO) {
             oldEmployee.setName(employeeDTO.name);
             oldEmployee.setEmail(employeeDTO.email);
             oldEmployee.setPhone(employeeDTO.phone);
-            oldEmployee.setDepartment(employeeDTO.password);
+            oldEmployee.setDepartment(employeeDTO.department);
             oldEmployee.setStatus(employeeDTO.status);
             employeeRepository.save(oldEmployee);
             return "Employee updated";
