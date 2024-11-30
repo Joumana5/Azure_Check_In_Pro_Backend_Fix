@@ -2,7 +2,7 @@ package com.example.tcu.checkinpro.Service;
 
 import com.example.tcu.checkinpro.Entity.employeeEntity;
 import com.example.tcu.checkinpro.DTO.employeeDTO;
-import com.example.tcu.checkinpro.Repository.employeeRepository;
+import com.example.tcu.checkinpro.Repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class employeeService {
-    private final com.example.tcu.checkinpro.Repository.employeeRepository employeeRepository;
+public class EmployeeService {
+    private final EmployeeRepository employeeRepository;
     @Autowired
-    public employeeService(employeeRepository employeeRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
@@ -44,14 +44,14 @@ public String addEmployee(employeeDTO employeeDTO) {
     }
 
     public String updateEmployee(Integer employeeId, employeeDTO employeeDTO) {
-        Optional <employeeEntity> employeeEntity = employeeRepository.findById(employeeId);
+        Optional <employeeEntity> employeeEntity = employeeRepository.findById(Long.valueOf(employeeId));
 
         if (employeeEntity.isPresent()) {
             employeeEntity oldEmployee = employeeEntity.get();
             oldEmployee.setName(employeeDTO.name);
             oldEmployee.setEmail(employeeDTO.email);
             oldEmployee.setPhone(employeeDTO.phone);
-            oldEmployee.setDepartment(employeeDTO.password);
+            oldEmployee.setDepartment(employeeDTO.department);
             oldEmployee.setStatus(employeeDTO.status);
             employeeRepository.save(oldEmployee);
             return "Employee updated";
@@ -62,11 +62,11 @@ public String addEmployee(employeeDTO employeeDTO) {
     }
 
     public String deleteEmployee(Integer employee_id) {
-        Optional<employeeEntity> employeeEntity = employeeRepository.findById(employee_id);
+        Optional<employeeEntity> employeeEntity = employeeRepository.findById(Long.valueOf(employee_id));
         if (employeeEntity.isEmpty()) {
             return "Employee not found";
         }else {
-            employeeRepository.deleteById(employee_id);
+            employeeRepository.deleteById(Long.valueOf(employee_id));
             return "Employee deleted";
         }
 
