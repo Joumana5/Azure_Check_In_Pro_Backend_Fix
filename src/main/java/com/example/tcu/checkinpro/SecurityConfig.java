@@ -32,7 +32,8 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> {
                     authorizeRequests
-                            .requestMatchers("/auth/login", "/auth/register", "/Employee/allEmployees").permitAll()
+                            .requestMatchers("/auth/login", "/auth/register").permitAll()
+                            .requestMatchers("/Employee/**").permitAll()
                             .anyRequest().authenticated();
                     logger.debug("Configured request matchers");
                 })
