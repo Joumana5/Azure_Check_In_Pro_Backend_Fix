@@ -4,6 +4,7 @@ import com.example.tcu.checkinpro.DTO.employeeDTO;
 import com.example.tcu.checkinpro.Entity.employeeEntity;
 import com.example.tcu.checkinpro.Service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class employeeController {
     }
 
     @PostMapping("/addEmployee")
-    public String addEmployee(@RequestBody employeeDTO employeeDTO) {
+    public ResponseEntity<String> addEmployee(@RequestBody employeeDTO employeeDTO) {
         return employeeService.addEmployee(employeeDTO);
     }
 

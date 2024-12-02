@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -31,20 +33,20 @@ public class Login {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginDTO loginRequest, HttpServletRequest request) {
+    public ResponseEntity<String> login(@RequestBody LoginDTO loginRequest) {
         logger.debug("Login attempt for email: {}", loginRequest.getEmail());
         boolean isAuthenticated = userService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         if (isAuthenticated) {
             logger.debug("Authentication successful for email: {}", loginRequest.getEmail());
             UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword(), new ArrayList<>());
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword(), new ArrayList<>());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtUtil.generateToken(loginRequest.getEmail());
             logger.debug("Generated token for email: {}", loginRequest.getEmail());
-            return token;
+            return ResponseEntity.ok(token); // Renvoie le token avec un statut 200
         } else {
             logger.debug("Authentication failed for email: {}", loginRequest.getEmail());
-            return "Invalid email or password";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password"); // Statut 401
         }
     }
 
